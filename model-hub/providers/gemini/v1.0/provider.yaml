@@ -1,0 +1,93 @@
+# --------------------------------------------------------------------
+# Copyright (c) 2026, WSO2 LLC. (https://www.wso2.com).
+#
+# WSO2 LLC. licenses this file to you under the Apache License,
+# Version 2.0 (the "License"); you may not use this file except
+# in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+# --------------------------------------------------------------------
+
+apiVersion: modelhub.api-platform.wso2.com/v1alpha1
+kind: ProviderDefinition
+metadata:
+  name: gemini
+  version: "1.0"
+spec:
+  displayName: Gemini
+  description: Google's Gemini models through Google AI Studio and Vertex AI.
+  wireFormat: gemini
+  hosting: hosted
+  defaultUrl: https://generativelanguage.googleapis.com
+  auth:
+    type: apiKey
+    header: x-goog-api-key
+  links:
+    logoUrl: https://raw.githubusercontent.com/wso2/api-platform/main/llm-provider-specs/gemini/icon.png
+    openapiSpecUrl: https://raw.githubusercontent.com/wso2/api-platform/main/llm-provider-specs/gemini/openapi.yaml
+  template:
+    groupId: wso2-gemini
+    managedBy: wso2
+    version: v1.0
+    promptTokens:
+      location: payload
+      identifier: $.usageMetadata.promptTokenCount
+    completionTokens:
+      location: payload
+      identifier: $.usageMetadata.candidatesTokenCount
+    totalTokens:
+      location: payload
+      identifier: $.usageMetadata.totalTokenCount
+    remainingTokens:
+      location: header
+      identifier: x-ratelimit-remaining-tokens
+    requestModel:
+      location: pathParam
+      identifier: models/([a-zA-Z0-9.\-]+)
+    responseModel:
+      location: payload
+      identifier: $.modelVersion
+    cachedTokens:
+      location: payload
+      identifier: $.usageMetadata.cachedContentTokenCount
+    reasoningTokens:
+      location: payload
+      identifier: $.usageMetadata.thoughtsTokenCount
+    serviceTier:
+      location: payload
+      identifier: $.usageMetadata.serviceTier
+      fallbackIdentifiers:
+        - $.usageMetadata.trafficType
+      valueMap:
+        ON_DEMAND_FLEX: flex
+        ON_DEMAND_PRIORITY: priority
+        flex: flex
+        priority: priority
+    providerFields:
+      cacheTokensDetails:
+        location: payload
+        identifier: $.usageMetadata.cacheTokensDetails
+      candidates:
+        location: payload
+        identifier: $.candidates
+      candidatesTokensDetails:
+        location: payload
+        identifier: $.usageMetadata.candidatesTokensDetails
+      promptTokensDetails:
+        location: payload
+        identifier: $.usageMetadata.promptTokensDetails
+      responseTokensDetails:
+        location: payload
+        identifier: $.usageMetadata.responseTokensDetails
+      toolUsePromptTokenCount:
+        location: payload
+        identifier: $.usageMetadata.toolUsePromptTokenCount
+    cacheAccounting: inclusive

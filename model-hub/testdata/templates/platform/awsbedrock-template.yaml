@@ -1,0 +1,54 @@
+# --------------------------------------------------------------------
+# Copyright (c) 2025, WSO2 LLC. (https://www.wso2.com).
+#
+# WSO2 LLC. licenses this file to you under the Apache License,
+# Version 2.0 (the "License"); you may not use this file except
+# in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+# --------------------------------------------------------------------
+
+metadata:
+  name: awsbedrock
+spec:
+  groupId: wso2-awsbedrock
+  displayName: AWS Bedrock
+  managedBy: wso2
+  version: v1.0
+  metadata:
+    # AWS Bedrock now supports Bearer-token auth (Amazon Bedrock API keys) in
+    # addition to the legacy SigV4 flow. The gateway injects this as
+    # `Authorization: Bearer <key>`; the portal prepends the `Bearer ` prefix so
+    # the operator only pastes the raw key. endpointUrl is deliberately omitted
+    # because the Bedrock runtime host is region-specific
+    # (https://bedrock-runtime.<region>.amazonaws.com) and must be supplied per
+    # provider.
+    auth:
+      type: apiKey
+      header: Authorization
+      valuePrefix: "Bearer "
+    logoUrl: https://raw.githubusercontent.com/wso2/api-platform/main/llm-provider-specs/awsbedrock/icon.png
+    openapiSpecUrl: https://raw.githubusercontent.com/wso2/api-platform/main/llm-provider-specs/awsbedrock/openapi.yaml
+  promptTokens:
+    location: payload
+    identifier: $.usage.inputTokens
+  completionTokens:
+    location: payload
+    identifier: $.usage.outputTokens
+  totalTokens:
+    location: payload
+    identifier: $.usage.totalTokens
+  requestModel:
+    location: pathParam
+    identifier: model/([A-Za-z0-9.:-]+)/
+  responseModel:
+    location: pathParam
+    identifier: model/([A-Za-z0-9.:-]+)/

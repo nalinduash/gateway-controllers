@@ -1,0 +1,108 @@
+# --------------------------------------------------------------------
+# Copyright (c) 2026, WSO2 LLC. (https://www.wso2.com).
+#
+# WSO2 LLC. licenses this file to you under the Apache License,
+# Version 2.0 (the "License"); you may not use this file except
+# in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+# --------------------------------------------------------------------
+
+apiVersion: modelhub.api-platform.wso2.com/v1alpha1
+kind: ProviderDefinition
+metadata:
+  name: anthropic
+  version: "1.0"
+spec:
+  displayName: Anthropic
+  description: Anthropic's Claude models through the Messages API.
+  wireFormat: anthropic
+  hosting: hosted
+  defaultUrl: https://api.anthropic.com
+  auth:
+    type: apiKey
+    header: x-api-key
+  links:
+    logoUrl: https://raw.githubusercontent.com/wso2/api-platform/main/llm-provider-specs/anthropic/icon.png
+    openapiSpecUrl: https://raw.githubusercontent.com/wso2/api-platform/main/llm-provider-specs/anthropic/openapi.yaml
+  template:
+    groupId: wso2-anthropic
+    managedBy: wso2
+    version: v1.0
+    promptTokens:
+      location: payload
+      identifier: $.usage.input_tokens
+      fallbackIdentifiers:
+        - $.message.usage.input_tokens
+    completionTokens:
+      location: payload
+      identifier: $.usage.output_tokens
+      fallbackIdentifiers:
+        - $.message.usage.output_tokens
+    remainingTokens:
+      location: header
+      identifier: anthropic-ratelimit-tokens-remaining
+    requestModel:
+      location: payload
+      identifier: $.model
+    responseModel:
+      location: payload
+      identifier: $.model
+      fallbackIdentifiers:
+        - $.message.model
+    cachedTokens:
+      location: payload
+      identifier: $.usage.cache_read_input_tokens
+      fallbackIdentifiers:
+        - $.message.usage.cache_read_input_tokens
+    cacheWriteTokens:
+      location: payload
+      identifier: $.usage.cache_creation.ephemeral_5m_input_tokens
+      fallbackIdentifiers:
+        - $.message.usage.cache_creation.ephemeral_5m_input_tokens
+        - $.usage.cache_creation_input_tokens
+        - $.message.usage.cache_creation_input_tokens
+    cacheWrite1hTokens:
+      location: payload
+      identifier: $.usage.cache_creation.ephemeral_1h_input_tokens
+      fallbackIdentifiers:
+        - $.message.usage.cache_creation.ephemeral_1h_input_tokens
+    reasoningTokens:
+      location: payload
+      identifier: $.usage.output_tokens_details.thinking_tokens
+      fallbackIdentifiers:
+        - $.message.usage.output_tokens_details.thinking_tokens
+    serviceTier:
+      location: payload
+      identifier: $.usage.service_tier
+      fallbackIdentifiers:
+        - $.message.usage.service_tier
+      valueMap:
+        batch: batch
+        priority: priority
+    providerFields:
+      inferenceGeo:
+        location: payload
+        identifier: $.usage.inference_geo
+        fallbackIdentifiers:
+          - $.message.usage.inference_geo
+      searchContextSize:
+        location: payload
+        identifier: $.web_search_options.search_context_size
+      speed:
+        location: payload
+        identifier: $.speed
+      webSearchRequests:
+        location: payload
+        identifier: $.usage.server_tool_use.web_search_requests
+        fallbackIdentifiers:
+          - $.message.usage.server_tool_use.web_search_requests
+    cacheAccounting: additive

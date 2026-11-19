@@ -20,6 +20,7 @@ package catalog
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -34,7 +35,7 @@ import (
 // File names inside a provider version folder.
 const (
 	ProviderFile = "provider.yaml"
-	ModelsFile   = "models.yaml"
+	ModelsFile   = "models.json"
 	IconFile     = "icon.png"
 )
 
@@ -118,7 +119,7 @@ func LoadProvider(dir string) (Provider, error) {
 	if err != nil {
 		return p, fmt.Errorf("%s: %w", dir, err)
 	}
-	if err := decodeStrict(modelsRaw, &p.Models); err != nil {
+	if err := decodeStrictJSON(modelsRaw, &p.Models); err != nil {
 		return p, fmt.Errorf("%s/%s: %w", dir, ModelsFile, err)
 	}
 
@@ -167,6 +168,19 @@ func decodeStrict(data []byte, out any) error {
 	var extra any
 	if err := dec.Decode(&extra); !errors.Is(err, io.EOF) {
 		return errors.New("file must hold exactly one YAML document")
+	}
+	return nil
+}
+
+// decodeStrictJSON parses one JSON document and rejects unknown fields.
+func decodeStrictJSON(data []byte, out any) error {
+	dec := json.NewDecoder(bytes.NewReader(data))
+	dec.DisallowUnknownFields()
+	if err := dec.Decode(out); err != nil {
+		return err
+	}
+	if _, err := dec.Token(); !errors.Is(err, io.EOF) {
+		return errors.New("file must hold exactly one JSON document")
 	}
 	return nil
 }

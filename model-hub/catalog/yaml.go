@@ -20,6 +20,7 @@ package catalog
 
 import (
 	"bytes"
+	"encoding/json"
 
 	"go.yaml.in/yaml/v3"
 )
@@ -43,4 +44,16 @@ func MarshalYAML(value any) ([]byte, error) {
 // existing templates). Definition files go through the strict decoder in Load.
 func UnmarshalYAML(data []byte, out any) error {
 	return yaml.Unmarshal(data, out)
+}
+
+// MarshalJSON writes value as JSON with two-space indentation.
+func MarshalJSON(value any) ([]byte, error) {
+	var buf bytes.Buffer
+	enc := json.NewEncoder(&buf)
+	enc.SetEscapeHTML(false)
+	enc.SetIndent("", "  ")
+	if err := enc.Encode(value); err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
 }

@@ -1,0 +1,6 @@
+{
+  "apiVersion": "modelhub.api-platform.wso2.com/v1alpha1",
+  "kind": "ModelList",
+  "provider": "vllm",
+  "models": []
+}

@@ -13,7 +13,7 @@ request path. A Hub entry becomes the `LlmProviderTemplate` resource that exists
 model-hub/
   providers/<name>/v<X.Y>/
     provider.yaml   ProviderDefinition: the template spec plus catalog fields
-    models.yaml     ModelList: the provider's models and their prices
+    models.json     ModelList: the provider's models and their prices
     icon.png        optional, PNG only
   catalog/          loading, validation, projections and the publish bundle
   reconcile/        the pricing comparison with LiteLLM
@@ -41,12 +41,12 @@ through Policy Hub review.
    | `spec.links` | Optional logo and OpenAPI links, on `raw.githubusercontent.com` only |
    | `spec.template` | The `LlmProviderTemplate` spec: where the gateway reads token counts and the model name |
 
-3. Write `models.yaml`. A self-hosted provider may list no models.
+3. Write `models.json`. A self-hosted provider may list no models.
 4. Run the validator.
 
 ## Add or change a model
 
-Each entry in `models.yaml` keeps the model's name and `pricing` exactly as they appear in the
+Each entry in `models.json` keeps the model's name and `pricing` exactly as they appear in the
 gateway's `model_prices.json`, because the `llm-cost` policy looks the name up as written and picks
 its fee logic from `pricing.provider`. Field names follow the pricing file, which matches LiteLLM's.
 

@@ -179,7 +179,7 @@ func validFiles(t *testing.T) map[string]string {
 	if err != nil {
 		t.Fatal(err)
 	}
-	models, err := MarshalYAML(p.Models)
+	models, err := MarshalJSON(p.Models)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -136,7 +136,7 @@ type ResourceMapping struct {
 	TokenFields `yaml:",inline"`
 }
 
-// ModelList is models.yaml: every model a provider version serves.
+// ModelList is models.json: every model a provider version serves.
 type ModelList struct {
 	APIVersion string  `yaml:"apiVersion" json:"apiVersion"`
 	Kind       string  `yaml:"kind" json:"kind"`

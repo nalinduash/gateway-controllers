@@ -218,7 +218,7 @@ func write(dir string, def catalog.ProviderDefinition, models catalog.ModelList,
 	if err := writeYAML(filepath.Join(dir, catalog.ProviderFile), def); err != nil {
 		return err
 	}
-	if err := writeYAML(filepath.Join(dir, catalog.ModelsFile), models); err != nil {
+	if err := writeJSON(filepath.Join(dir, catalog.ModelsFile), models); err != nil {
 		return err
 	}
 	return os.WriteFile(filepath.Join(dir, catalog.IconFile), icon, 0o644)
@@ -238,4 +238,12 @@ func writeYAML(path string, value any) error {
 		return err
 	}
 	return os.WriteFile(path, append([]byte(header), data...), 0o644)
+}
+
+func writeJSON(path string, value any) error {
+	data, err := catalog.MarshalJSON(value)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(path, data, 0o644)
 }

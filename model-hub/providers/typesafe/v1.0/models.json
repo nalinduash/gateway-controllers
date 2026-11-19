@@ -1,0 +1,37 @@
+{
+  "apiVersion": "modelhub.api-platform.wso2.com/v1alpha1",
+  "kind": "ModelList",
+  "provider": "typesafe",
+  "models": [
+    {
+      "name": "jev-1.13.0",
+      "status": "unverified",
+      "pricing": {
+        "input_cost_per_token": 4.2e-8,
+        "max_input_tokens": 64000,
+        "output_cost_per_token": 0,
+        "provider": "typesafe"
+      }
+    },
+    {
+      "name": "jev-latest",
+      "status": "unverified",
+      "pricing": {
+        "input_cost_per_token": 4.2e-8,
+        "max_input_tokens": 64000,
+        "output_cost_per_token": 0,
+        "provider": "typesafe"
+      }
+    },
+    {
+      "name": "jev-preview",
+      "status": "unverified",
+      "pricing": {
+        "input_cost_per_token": 4.2e-8,
+        "max_input_tokens": 64000,
+        "output_cost_per_token": 0,
+        "provider": "typesafe"
+      }
+    }
+  ]
+}
